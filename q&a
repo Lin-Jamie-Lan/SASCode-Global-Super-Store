@@ -202,10 +202,6 @@ from answer13a
 where avg_of_city < count_comb
 order by count_comb desc;
 
-                  proc sql;
-                  create table answer13b as
-                  select
-                        *,
       
 /*below is one step, with sub-query*/
 proc sql;
