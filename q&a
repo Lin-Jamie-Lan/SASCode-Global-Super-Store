@@ -57,3 +57,65 @@ PROC IMPORT
      Sheets=People;
     GETNAMES = YES;    
     
+/*2. Append all orders tab and remove duplicates*/
+proc sql;
+create table answer2 as 
+select 
+      * from Orders
+Union
+select 
+      * from Orders2
+;
+
+/*3. Extract the first 2 letters of Order ID and create a new column of State.*/
+proc sql;
+create table answer3 as
+select 
+      substr(OrderID, 1,2,) as state1
+from answer2
+;
+
+/4. Make 2 columns, first name and last name from the CustomerName column*/
+proc sql;
+create table answer4 as
+select 
+      scan(CustomerName,1, ' ') as First_Name,
+      scan(CustomerName,2, ' ') as Last_Name
+from answer2
+;
+
+/5. Create a new column 'OrderDate_Plus_2' by adding 2 days to Order Date.*/
+proc sql;
+create table answer5 as
+select 
+      OrderDate,
+      intnx('day', OrderDate, 2)as OrderDate_Plus_2 FORMAT MMDDYY10. 
+from answer2
+;
+
+/*6. Find number of days between orderdate and ship date*/
+proc sql;
+create table answer6 as
+select 
+      OrderDate,
+      ShipDate,
+      intck('day', OrderDate, ShipDate) as Day_diff
+from 
+      answer2
+;
+
+/*7. Create a new column 'Flag' if the day difference is more than 2 days*/
+proc sql;
+create table answer7 as
+select
+      *,
+      Case
+            when Day_diff>=2 then 'more than 2'
+            else ' '
+      End as Flag
+from 
+      answer6
+;
+
+/*8. Extract year from orderdate*/
+ 
