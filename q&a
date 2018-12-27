@@ -1,0 +1,59 @@
+/*MACRO VARIABLES TO PASS USERNAME AND PASSWORD(S) TO ACCESS TARGET DATA SOURCES USED FOR TEST OBJECTIVE(S) */
+
+%LET USR = XXXX;
+%LET PWD = XXXX;
+
+/*ENTER THE SAS GRID DIRECTORY WHERE OUTPUT FILES ARE TO BE STORED */
+LIBNAME PROJECT'/TEST/GLOBAL_SUPER_STORE';
+
+%LET location=/C:/TEST/;
+%LET file=global_super_store_2016.xlsx ;  /*Enter the filename */
+
+/*CONNEC TO DATA SOURCE */
+
+/*1. Import 'Global SuperStore' Order 1-4, Returns and people*/
+
+PROC IMPORT
+      OUT = Orders
+    DATAFILE= "&location.&file."
+    DBMS=xlsx REPLACE;
+      Sheets =Orders;
+    GETNAMES = YES; 
+RUN;
+
+PROC IMPORT
+     OUT = Orders2
+    DATAFILE= '&location.&file."
+    DBMS=xlsx replace;
+     Sheets=Orders2;
+    GETNAMES = YES;
+RUN;
+
+PROC IMPORT
+     OUT = Orders3
+    DATAFILE= '&location.&file."
+    DBMS=xlsx replace;
+     Sheets=Orders3;
+    GETNAMES = YES;
+    
+PROC IMPORT
+     OUT = Orders4
+    DATAFILE= '&location.&file."
+    DBMS=xlsx replace;
+     Sheets=Orders4;
+    GETNAMES = YES;
+    
+PROC IMPORT
+     OUT =  Returns
+    DATAFILE= '&location.&file."
+    DBMS=xlsx replace;
+     Sheets=Returns;
+    GETNAMES = YES;    
+ 
+ PROC IMPORT
+     OUT =  People
+    DATAFILE= '&location.&file."
+    DBMS=xlsx replace;
+     Sheets=People;
+    GETNAMES = YES;    
+    
