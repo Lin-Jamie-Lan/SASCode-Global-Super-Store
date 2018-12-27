@@ -118,4 +118,96 @@ from
 ;
 
 /*8. Extract year from orderdate*/
- 
+proc sql;
+create table answer8 as
+select 
+      OrderDate,
+      YEAR(OrderDate) AS Order Year
+from 
+      answer6
+;
+
+/*9. Create a new column called ID with: first letter of First Name, First Letter of Second Name, -, first two letters of order id */
+proc sql;
+create table answer9a as
+select
+      *,
+      scan(CustomerName,1, ' ') as First_Name,
+      scan(CustomerName,2, ' ') as Last_Name,
+      substr(OrderID, 1,2) as state2
+from answer2
+;
+
+proc sql;
+create table answer9b as
+select
+      First_Name,
+      Last_Name,
+      OrderID,
+      state2,
+      CATS(substr(First_Name,1,1), substr(Last_Name,1,1), '-', state2) as
+Combined
+from answer9a
+;
+
+/*10. Drop St, ID, Year*/
+data answer10;
+set answer2 (drop=OrderID);
+run;
+
+/*11. Join the order and return table and remove the duplicates*/
+proc sql;
+create table answer11 as
+select
+      distinct
+      *
+from
+      Orders a
+      left join Returns b
+      on a.OrderID=b.OrderID
+;
+/*verify it indeed distinct, by thecking the left table's distinct number*/
+      proc sql;
+      create table answer11a as
+      select 
+            distinct
+            *
+      from Orders;
+    
+/*12. Select the how many times a combination of country and city appears and sort it by decreasing number */
+proc sql;
+create table answer12 as 
+select 
+      Country,
+      City,
+      count(*) as count_comb
+from Orders
+group by Country, City
+order by count_comb desc
+;
+
+/*13. Select the combination of country and city which has the total sum more than the average of all Country an city.*/
+proc sql;
+create table answer13a as
+select
+      *,
+      avg(count_comb) as avg_of_city
+from answer12;
+
+proc sql;
+create table answer13 as
+select
+      *
+from answer13a
+where avg_of_city < count_comb
+order by count_comb desc;
+
+/*below is one step, with sub-query*/
+proc sql;
+create table answer13b as
+select 
+      *
+from answer12, (select avg(count_comb) as avg_of_city from answer12)
+where avg_of_city < count_comb
+order by count_comb desc
+;
