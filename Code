@@ -186,7 +186,7 @@ group by Country, City
 order by count_comb desc
 ;
 
-/*13. Select the combination of country and city which has the total sum more than the average of all Country an city.*/
+/*13. Select the combination of country and city which has the total sum more than the average of all Country and city.*/
 proc sql;
 create table answer13a as
 select
