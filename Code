@@ -166,7 +166,7 @@ from
       left join Returns b
       on a.OrderID=b.OrderID
 ;
-/*verify it indeed distinct, by thecking the left table's distinct number*/
+/*verify it indeed distinct, by checking the left table's distinct number*/
       proc sql;
       create table answer11a as
       select 
